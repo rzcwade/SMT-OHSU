@@ -3,7 +3,7 @@ import random
 
 # use freshvariables, unify, substitute
 
-kb = [
+cnf = [
         ['ostrich','sam'],
         ['canary','tweety'],
         [ ['bird','X'],['not',['ostrich','X']] ],
@@ -11,7 +11,10 @@ kb = [
         [ ['fly','X'],['not',['bird','X']],['not',['normal','X']] ],
         [ ['not',['normal','X']],['not',['ostrich','X']] ],
         [ ['normal','X'],['not',['canary','X']] ],
+<<<<<<< HEAD
         [ [['boy',['goo','X','Y']],['boy',['foo','X','Y']]] ]
+=======
+>>>>>>> 4c7c0dd4348bff8f4e784b5b8b63a0a7b6be5f06
      ]
 
 def sameclause(a,b):
@@ -83,9 +86,28 @@ def prove(query, kb):
         
             return True
         #return True if proved and print
+<<<<<<< HEAD
         print("proved")
        
 #query = ['fly','sam']
 query = ['fly','tweety']
 #query2 = ['boy','X']
 prove(['fly','sam'],kb)
+=======
+        while kb != []:
+            for rule in cnf:
+                rule = freshvariables(rule)
+                if ((rule[0] == 'not') and (kb[0][0] != 'not')) or \
+                   ((rule[0] != 'not') and (kb[0][0] == 'not')):
+                       if sameclause(rule[0],kb[0]) and (rule[1:] not in kb):
+                           print("can be resolved")
+                           kb = kb[1:]+rule[1:]
+                
+        
+            return True
+        
+        
+        return False
+        
+prove(['fly','sam'],[])
+>>>>>>> 4c7c0dd4348bff8f4e784b5b8b63a0a7b6be5f06
