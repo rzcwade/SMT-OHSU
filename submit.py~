@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun 14 12:22:41 2017
+
+@author: zicheng
+"""
+
+from flask import Flask, redirect, url_for, request, render_template
+import moses_translate
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('translate.html')
+
+
+@app.route('/success')
+def success():
+    return render_template('save_res.html')
+
+
+@app.route('/translate',methods = ['POST', 'GET'])
+def translate():
+   if request.method == 'POST':
+      text_input = request.form['textline']
+      processed_text = text_input.lower()
+      with open('translate_me.txt','w') as f_in:
+          f_in.write(processed_text)
+      # get translate function from run_me module to initiate moses translation
+      moses_translate.upload('translate_me.txt')
+      with open('output.txt','r', encoding='utf-8') as f_out:
+          text_out = f_out.read()
+      if request.form['submit'] == 'Do the thing':
+          os.system('python ir_part.py')
+      return render_template('translate.html', sub_input=processed_text,sub_output=text_out)

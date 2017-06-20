@@ -1,0 +1,51 @@
+import subprocess
+import yaml
+import time
+
+def translate(text):
+    start_time = time.time()
+    """
+    Run translation model using config
+    """
+    with open('/home/ren/moses/moses-api/config.yaml', 'r') as f:
+        doc = yaml.load(f)
+    fileIn = doc['sample-models']['in']
+    fileOut = doc['sample-models']['out']
+    homeDir = doc['sample-models']['homeDir']
+    runCommand = doc['sample-models']['command']
+    status = 'Files successfully read'
+    subprocess.call(['rm %s && rm %s' % (fileIn, fileOut)], shell=True)
+    text8 = text.encode('utf8')
+    inputFile = open(fileIn, 'w')
+    inputFile.write(text8 + '\n')
+    inputFile.close()
+    subprocess.call([runCommand], cwd=homeDir, shell=True)
+    readTranslate = open(fileOut, 'r')
+    translatedText = readTranslate.read().decode('utf8')
+    readTranslate.close()
+    return {
+            "STATUS": status,
+            "LAN": 'N/A',
+            "MODEL": str(homeDir),
+            "CMD": str(runCommand),
+            "URL": request.host_url.rstrip('/').decode().encode('utf8'),
+            "INPUT": text.encode('utf8'),
+            "INPUT_SIZE": len(text.encode('utf8')),
+            "INPUT_PATH": str(fileIn),            
+            "OUTPUT": translatedText.encode('utf8').rstrip(),
+            "OUTPUT_SIZE": len(translatedText.encode('utf8')),
+            "OUTPUT_PATH": str(fileOut),
+            "DURATION": '%.3f seconds' % (time.time() - start_time)
+    }
+
+
+def upload(file):
+    """
+    Tranlsate file
+    """
+    text = file.read().decode('utf8')
+    text = translate(text)
+    with open('$HOME/run_moses/output.txt', 'w+') as f:
+    	f.write(text)
+
+upload('$HOME/run_moses/translate_me.txt')

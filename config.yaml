@@ -1,0 +1,5 @@
+sample-models:
+    in: '/home/ren/moses/moses-models/sample-models/phrase-model/in'
+    out: '/home/ren/moses/moses-models/sample-models/out'
+    homeDir: '/home/ren/moses/moses-models/sample-models'
+    command: '/home/ren/moses/mosesdecoder/bin/moses -f phrase-model/moses.ini < phrase-model/in > out'
